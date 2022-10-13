@@ -44,6 +44,14 @@ class CurrencyController extends Controller
                     'currency_code' => $collection[0]->rates[$i]->code,
                     'exchange_rate' => $collection[0]->rates[$i]->mid,
                 ];
+                    if($this->checkExistCurrency($data))
+                    {
+                        $this->update($data);
+                    }
+                    else
+                    {
+                        Currency::create($data);
+                    }
 
                 }
 
