@@ -13,18 +13,6 @@ use Carbon\Carbon;
 class CurrencyController extends Controller
 {
 
-    private function checkExistCurrency(array $data) : bool
-    {
-        $record = DB::table('currency')
-            ->select('exchange_rate')
-            ->where('name' , '=' , $data['name'] )
-            ->get();
-        if($record === null)
-            return false;
-        else
-            return true;
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -40,20 +28,11 @@ class CurrencyController extends Controller
                 $collection = json_decode($response);
                 for( $i = 0 ; $i < sizeof($collection[0]->rates) ; $i++)
                 {
-                    $data = [
-                    'name' => $collection[0]->rates[$i]->currency,
-                    'currency_code' => $collection[0]->rates[$i]->code,
-                    'exchange_rate' => $collection[0]->rates[$i]->mid,
-                ];
-                    if($this->checkExistCurrency($data))
-                    {
-                        $this->update($data);
-                    }
-                    else
-                    {
-                        Currency::create($data);
-                    }
-
+                    Currency::updateOrCreate(
+                        ['name' => $collection[0]->rates[$i]->currency],
+                        ['currency_code' => $collection[0]->rates[$i]->code],
+                        ['exchange_rate' => $collection[0]->rates[$i]->mid]
+                    );
                 }
 
                 return response()->json([
@@ -74,26 +53,5 @@ class CurrencyController extends Controller
         }
 
     }
-    private function update(array $data)
-    {
-        try {
-            $currentTime = Carbon::now();
-            DB::table('currency')
-                ->where('name',$data['name'])
-                ->update(['exchange_rate' => $data['exchange_rate'],"updated_at" => $currentTime]);
-            return response()->json([
-                'message' => 'Currency record updated'
-            ], 201);
-
-        }catch (\Exception $e)
-        {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
-
-    }
-
-
 
 }
