@@ -65,5 +65,25 @@ class CurrencyController extends Controller
         }
 
     }
+    private function update(array $data)
+    {
+        try {
+            DB::table('currency')
+                ->where('name',$data['name'])
+                ->update(['exchange_rate' => $data['exchange_rate']]);
+            return response()->json([
+                'message' => 'Currency records updated'
+            ], 201);
+
+        }catch (\Exception $e)
+        {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
+
 
 }
