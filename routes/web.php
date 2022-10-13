@@ -13,8 +13,5 @@ use App\Http\Controllers\Api\CurrencyController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/',[CurrencyController::class,'store']);
+Route::match(['get','post'],'/',[CurrencyController::class,'store']);

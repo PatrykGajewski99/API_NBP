@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Mockery\Exception;
+use Carbon\Carbon;
 
 class CurrencyController extends Controller
 {
@@ -33,7 +34,7 @@ class CurrencyController extends Controller
     public function store(Request $request)
     {
         try {
-            $response= Http::get("http://api.nbp.pl/api/exchangerates/tables/A/");
+            $response= Http::get("http://api.nbp.pl/api/exchangerates/tables/A");
             if($response->status() === 200)
             {
                 $collection = json_decode($response);
@@ -76,11 +77,12 @@ class CurrencyController extends Controller
     private function update(array $data)
     {
         try {
+            $currentTime = Carbon::now();
             DB::table('currency')
                 ->where('name',$data['name'])
-                ->update(['exchange_rate' => $data['exchange_rate']]);
+                ->update(['exchange_rate' => $data['exchange_rate'],"updated_at" => $currentTime]);
             return response()->json([
-                'message' => 'Currency records updated'
+                'message' => 'Currency record updated'
             ], 201);
 
         }catch (\Exception $e)
