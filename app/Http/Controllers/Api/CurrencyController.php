@@ -29,10 +29,11 @@ class CurrencyController extends Controller
                 for( $i = 0 ; $i < sizeof($collection[0]->rates) ; $i++)
                 {
                     Currency::updateOrCreate(
-                        ['name' => $collection[0]->rates[$i]->currency],
-                        ['currency_code' => $collection[0]->rates[$i]->code],
-                        ['exchange_rate' => $collection[0]->rates[$i]->mid]
-                    );
+                        [
+                            'name' => $collection[0]->rates[$i]->currency,
+                            'currency_code' => $collection[0]->rates[$i]->code,
+                            'exchange_rate' => $collection[0]->rates[$i]->mid
+                        ]);
                 }
 
                 return response()->json([
