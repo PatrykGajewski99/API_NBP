@@ -12,6 +12,17 @@ use Mockery\Exception;
 class CurrencyController extends Controller
 {
 
+    private function checkExistCurrency(array $data) : bool
+    {
+        $record = DB::table('currency')
+            ->select('exchange_rate')
+            ->where('name' , '=' , $data['name'] )
+            ->get();
+        if($record === null)
+            return false;
+        else
+            return true;
+    }
 
     /**
      * Store a newly created resource in storage.
