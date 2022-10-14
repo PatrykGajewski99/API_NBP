@@ -19,6 +19,8 @@ class CurrencyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public int $length;
+
     public function store(Request $request)
     {
         try {
@@ -26,7 +28,8 @@ class CurrencyController extends Controller
             if($response->status() === 200)
             {
                 $collection = json_decode($response);
-                for( $i = 0 ; $i < sizeof($collection[0]->rates) ; $i++)
+                $this->length=sizeof($collection[0]->rates);
+                for( $i = 0 ; $i < $this->length ; $i++)
                 {
                     Currency::updateOrCreate(
                         [
