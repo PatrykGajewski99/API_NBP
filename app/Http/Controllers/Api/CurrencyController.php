@@ -19,24 +19,41 @@ class CurrencyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+    private function read(){
+
+        try {
+            $response= Http::get("https://api.nbp.pl/api/exchangerates/tables/A");
+            $collection = json_decode($response);
+            return response()->json([
+                $collection[0]->rates
+            ], 201);
+
+        }catch(\Exception $e)
+        {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 404);
+        }
+
+    }
+
     public int $length;
 
     public function store(Request $request)
     {
-        try {
-            $response= Http::get("https://api.nbp.pl/api/exchangerates/tables/A");
-            if($response->status() === 200)
+            $data=self::read();
+            if($data->status() === 201)
             {
-                $collection = json_decode($response);
-                $this->length=sizeof($collection[0]->rates);
+                $content=$data->getOriginalContent();
+                $this->length=sizeof($content[0]);
                 for( $i = 0 ; $i < $this->length ; $i++)
                 {
                     Currency::updateOrCreate(
-                        ['name' => $collection[0]->rates[$i]->currency],
-                        [ 'currency_code' => $collection[0]->rates[$i]->code, 'exchange_rate' => $collection[0]->rates[$i]->mid]
+                        ['name' => $content[0][$i]->currency],
+                        [ 'currency_code' => $content[0][$i]->code, 'exchange_rate' => $content[0][$i]->mid]
                     );
                 }
-
                 return response()->json([
                     'message' => 'Records created'
                 ], 201);
@@ -47,13 +64,5 @@ class CurrencyController extends Controller
                     'message' => 'no content'
                 ], 404);
             }
-        }catch(\Exception $e)
-        {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
         }
-
-    }
-
 }
