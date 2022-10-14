@@ -24,7 +24,7 @@ class CurrencyController extends Controller
     public function store(Request $request)
     {
         try {
-            $response= Http::get("http://api.nbp.pl/api/exchangerates/tables/A");
+            $response= Http::get("https://api.nbp.pl/api/exchangerates/tables/A");
             if($response->status() === 200)
             {
                 $collection = json_decode($response);
@@ -32,11 +32,9 @@ class CurrencyController extends Controller
                 for( $i = 0 ; $i < $this->length ; $i++)
                 {
                     Currency::updateOrCreate(
-                        [
-                            'name' => $collection[0]->rates[$i]->currency,
-                            'currency_code' => $collection[0]->rates[$i]->code,
-                            'exchange_rate' => $collection[0]->rates[$i]->mid
-                        ]);
+                        ['name' => $collection[0]->rates[$i]->currency],
+                        [ 'currency_code' => $collection[0]->rates[$i]->code, 'exchange_rate' => $collection[0]->rates[$i]->mid]
+                    );
                 }
 
                 return response()->json([
