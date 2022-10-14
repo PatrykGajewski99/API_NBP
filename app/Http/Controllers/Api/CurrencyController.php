@@ -20,7 +20,8 @@ class CurrencyController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    private function read(){
+    private function read() : string
+    {
 
         try {
             $response= Http::get("https://api.nbp.pl/api/exchangerates/tables/A");
@@ -40,7 +41,7 @@ class CurrencyController extends Controller
 
     public int $length;
 
-    public function store(Request $request)
+    public function store(Request $request) : string
     {
             $data=self::read();
             if($data->status() === 201)
