@@ -15,3 +15,7 @@ use App\Http\Controllers\Api\CurrencyController;
 
 
 Route::match(['get','post'],'/',[CurrencyController::class,'store']);
+
+Route::get('/welcome',function (){
+    return view('welcome');
+})->middleware(['auth', 'verified'])->name('welcome');
