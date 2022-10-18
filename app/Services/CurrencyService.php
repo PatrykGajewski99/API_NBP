@@ -6,10 +6,14 @@ use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\JsonResponse;
+use Mockery\Exception;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CurrencyService
 {
-    public int $length;
+    private int $length;
+    private float $amount,$exchangeRate,$totalValue;
+    private string $currencyCode,$result;
 
     protected function read(): JsonResponse
     {
@@ -50,4 +54,51 @@ class CurrencyService
             ], 404);
         }
     }
+
+    private function getExchangeRate(string $currencyCode) : float
+    {
+        $currency = Currency::select('exchange_rate')
+            ->where('currency_code',$currencyCode)
+            ->get();
+
+        return $currency[0]->exchange_rate;
+    }
+
+    private function validateForm(Request $request): JsonResponse
+    {
+        try {
+            $this->amount = $request->amount;
+            $this->currencyCode = $request->to;
+
+            $request->validate([
+                'amount' => 'required|numeric',
+                'to' => 'required|string|min:3'
+            ]);
+            return response()->json([
+                'message' => "success"
+            ], 201);
+
+        }catch (Exception $e)
+        {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+    }
+
+    public function convertCurrency(Request $request)
+    {
+
+            if(self::validateForm($request)->getStatusCode() === 201)
+            {
+                $this->exchangeRate = self::getExchangeRate($this->currencyCode);
+                $this->totalValue = $this->amount / $this->exchangeRate;
+                $this->result = $request->amount." ".$request->from." = ".round($this->totalValue,2)." ".$request->to;
+
+                Alert::success('Currency conversion amount',$this->result);
+                return $this->result;
+            }
+    }
+
 }

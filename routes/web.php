@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CurrencyController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,10 @@ use App\Http\Controllers\Api\CurrencyController;
 
 Route::match(['get','post'],'/',[CurrencyController::class,'store']);
 
-Route::get('/welcome',function (){
-    return view('welcome');
-})->middleware(['auth', 'verified'])->name('welcome');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+Route::get('/result',[CurrencyController::class,'convertPLN'])->name('result');
