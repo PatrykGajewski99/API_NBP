@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::match(['get','post'],'/',[CurrencyController::class,'store']);
+Route::match(['get','post'],'/',[CurrencyController::class,'store'])->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -24,3 +24,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/result',[CurrencyController::class,'convertPLN'])->name('result');
+
+Route::get('/convertCurrency', function () {
+    return view('convertCurrency');
+})->name('convertCurrency');

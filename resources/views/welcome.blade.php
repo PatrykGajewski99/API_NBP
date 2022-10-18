@@ -57,8 +57,10 @@
 
                                 <div class="ml-12">
                                     <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                        <input id="from" name="from" type="text" class="field" value="PLN"/>
-                                        <button class="swap" id="swap" name="swap"><></button>
+                                        <select id="from" name="from" class="field">
+                                            <option value="PLN" >Polski złoty</option>
+                                        </select>
+                                        <a class="swap" id="swap" href="{{route('convertCurrency')}}"><></a>
                                     </div>
                                 </div>
                             </div>
@@ -110,12 +112,12 @@
 
                                 <div class="ml-12">
                                     <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                        <input type="number" id="amount" name="amount" class="field">
+                                        <input type="number" id="amount" name="amount" class="field" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button class="convert" name="convert" id="convert">CONVERT</button>
+                        <button class="convert" name="convert" id="convert" >CONVERT</button>
                     </div>
                 </form>
 

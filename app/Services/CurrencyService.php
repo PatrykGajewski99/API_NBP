@@ -13,7 +13,7 @@ class CurrencyService
 {
     private int $length;
     private float $amount,$exchangeRate,$totalValue;
-    private string $currencyCode,$result;
+    private string $currencyCodeFrom,$currencyCodeTo,$result;
 
     protected function read(): JsonResponse
     {
@@ -68,11 +68,13 @@ class CurrencyService
     {
         try {
             $this->amount = $request->amount;
-            $this->currencyCode = $request->to;
+            $this->currencyCodeFrom = $request->from;
+            $this->currencyCodeTo = $request->to;
 
             $request->validate([
                 'amount' => 'required|numeric',
-                'to' => 'required|string|min:3'
+                'from' => 'required|string|min:3',
+                'to' => 'required|string|min:3',
             ]);
             return response()->json([
                 'message' => "success"
@@ -89,11 +91,18 @@ class CurrencyService
 
     public function convertCurrency(Request $request)
     {
-
             if(self::validateForm($request)->getStatusCode() === 201)
             {
-                $this->exchangeRate = self::getExchangeRate($this->currencyCode);
-                $this->totalValue = $this->amount / $this->exchangeRate;
+                if($this->currencyCodeFrom === "PLN")
+                {
+                    $this->exchangeRate = self::getExchangeRate($this->currencyCodeTo);
+                    $this->totalValue = $this->amount / $this->exchangeRate;
+                }
+                else
+                {
+                    $this->exchangeRate = self::getExchangeRate($this->currencyCodeFrom);
+                    $this->totalValue = $this->amount * $this->exchangeRate;
+                }
                 $this->result = $request->amount." ".$request->from." = ".round($this->totalValue,2)." ".$request->to;
 
                 Alert::success('Currency conversion amount',$this->result);
