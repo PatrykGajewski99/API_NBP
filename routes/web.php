@@ -28,3 +28,7 @@ Route::get('/result',[CurrencyController::class,'convertPLN'])->name('result');
 Route::get('/convertCurrency', function () {
     return view('convertCurrency');
 })->name('convertCurrency');
+
+Route::get('/goldExchange', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('gold.exchange');
