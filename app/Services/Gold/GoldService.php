@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Gold;
 
 use App\Models\Gold;
 use App\Models\Currency;

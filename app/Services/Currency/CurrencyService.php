@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Currency;
 
 use App\Models\Currency;
 use Illuminate\Http\Request;

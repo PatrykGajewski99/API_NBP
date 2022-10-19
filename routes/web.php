@@ -28,4 +28,8 @@ Route::get('/convertCurrency', function () {
 
 Route::match(['get','post'],'/goldExchange',[GoldController::class,'store'])->middleware(['auth', 'verified'])->name('gold.exchange');
 
+Route::get('/convertGoldToCurrency', function () {
+    return view('convertGold');
+})->name('convertGoldToCurrency');
+
 Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])->name('convert.gold');

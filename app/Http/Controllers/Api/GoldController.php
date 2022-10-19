@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\GoldService;
+use App\Services\Gold\GoldService;
 use Illuminate\Http\Request;
 
 class GoldController extends Controller

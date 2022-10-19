@@ -18,26 +18,12 @@
                                     <div class="p-6">
                                         <div class="flex items-center">
                                             <img src="https://pixsector.com/cache/1549118e/av70a149d5d0f534e7ab0.png" class="img" alt="curreency"/>
-                                            <div class="ml-4 text-lg leading-7 font-semibold">Gold [g]</div>
+                                            <div class="ml-4 text-lg leading-7 font-semibold">Currency</div>
                                         </div>
 
                                         <div class="ml-12">
                                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                                <input type="number" id="gold" name="gold" class="field" step="0.01" required>
-                                                <a class="swap" id="swap" href="{{route('convertGoldToCurrency')}}"><></a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-                                        <div class="flex items-center">
-                                            <img src="https://pixsector.com/cache/1549118e/av70a149d5d0f534e7ab0.png" class="img" alt="curreency"/>
-                                            <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 dark:text-white">To</a></div>
-                                        </div>
-
-                                        <div class="ml-12">
-                                            <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                                <select id="to" name="to" class="field">
+                                                <select id="currency" name="currency" class="field">
                                                     <option value="UAH">hrywna (Ukraina)</option>
                                                     <option value="USD">dolar amerykański</option>
                                                     <option value="THB">bat (Tajlandia)</option>
@@ -64,6 +50,20 @@
                                                     <option value="CHF">frank szwajcarski</option>
                                                     <option value="XDR">SDR (MFW)</option>
                                                 </select>
+                                                <a class="swap" id="swap" href="{{route('gold.exchange')}}"><></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
+                                        <div class="flex items-center">
+                                            <img src="https://pixsector.com/cache/1549118e/av70a149d5d0f534e7ab0.png" class="img" alt="curreency"/>
+                                            <div class="ml-4 text-lg leading-7 font-semibold">Gold [g]</div>
+                                        </div>
+
+                                        <div class="ml-12">
+                                            <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
+                                                <input type="number" id="gold" name="gold" class="field" step="0.01" required>
                                             </div>
                                         </div>
                                     </div>
