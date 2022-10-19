@@ -2,6 +2,7 @@
 
 namespace App\Services\Gold;
 
+use App\Http\Requests\GoldRequest;
 use App\Models\Gold;
 use App\Models\Currency;
 use Illuminate\Http\JsonResponse;
@@ -12,8 +13,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class GoldService
 {
-    private float $amount,$exchangeGoldRate,$exchangeCurrencyRate,$totalValue;
-    private string $currencyCodeTo,$result;
 
     protected function read(): JsonResponse
     {
@@ -55,53 +54,46 @@ class GoldService
     private function getGoldExchangeRate() : float
     {
         $currency = Gold::select('exchange_rate')
-            ->get();
+            ->first();
 
-        return $currency[0]->exchange_rate;
+        return $currency->exchange_rate;
     }
 
     private function getCurrencyExchangeRate(string $currencyCode) : float
     {
         $currency = Currency::select('exchange_rate')
             ->where('currency_code',$currencyCode)
-            ->get();
+            ->first();
 
-        return $currency[0]->exchange_rate;
+        return $currency->exchange_rate;
     }
-    private function validateForm(Request $request): JsonResponse
+
+    public function convertGoldToCurrency(GoldRequest $request) : float
     {
-        try {
-            $this->amount = $request->gold;
-            $this->currencyCodeTo = $request->to;
+            $exchangeGoldRate = self::getGoldExchangeRate();
+            $exchangeCurrencyRate = self::getCurrencyExchangeRate($request->currency);
 
-            $request->validate([
-                'gold' => 'required|numeric',
-                'to' => 'required|string|min:3',
-            ]);
-            return response()->json([
-                'message' => "success"
-            ], 201);
+            $totalValue = $request->amount * ($exchangeGoldRate / $exchangeCurrencyRate);
 
-        }catch (Exception $e)
-        {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
-        }
+            $result = $request->amount." [g]"." = ".round($totalValue,2)." ".$request->currency;
+            Alert::success('Gold conversion to currency ',$result);
+
+            return $totalValue;
 
     }
 
-    public function convertGoldToCurrency(Request $request)
+    public function convertCurrencyToGold(GoldRequest $request) : float
     {
-        if(self::validateForm($request)->getStatusCode() === 201)
-        {
-            $this->exchangeGoldRate = self::getGoldExchangeRate();
-            $this->exchangeCurrencyRate = self::getCurrencyExchangeRate($this->currencyCodeTo);
-            $this->totalValue = $this->amount * $this->exchangeGoldRate * $this->exchangeCurrencyRate;
+        $exchangeGoldRate = self::getGoldExchangeRate();
+        $exchangeCurrencyRate = self::getCurrencyExchangeRate($request->currency);
 
-            $this->result = $this->amount." [g]"." = ".round($this->totalValue,2)." ".$request->to;
-            Alert::success('Gold conversion amount',$this->result);
-            return $this->result;
-        }
+        $totalValue = ($request->amount *  $exchangeCurrencyRate)/$exchangeGoldRate;
+
+        $result = $request->amount . " ".$request->currency." = ".round($totalValue,2)." [g]";
+        Alert::success('Currency conversion to gold',$result);
+
+        return $totalValue;
+
     }
+
 }

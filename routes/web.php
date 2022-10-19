@@ -32,4 +32,5 @@ Route::get('/convertGoldToCurrency', function () {
     return view('convertGold');
 })->name('convertGoldToCurrency');
 
-Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])->name('convert.gold');
+Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])->name('convert.gold.to.currency');
+Route::get('/convertCurrencyToGold',[GoldController::class,'convertCurrencyToGold'])->name('convert.currency.to.gold');

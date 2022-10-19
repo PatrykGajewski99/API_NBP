@@ -2,6 +2,7 @@
 
 namespace App\Services\Currency;
 
+use App\Http\Requests\CurrencyRequest;
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -11,9 +12,28 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class CurrencyService
 {
-    private int $length;
-    private float $amount,$exchangeRate,$totalValue;
-    private string $currencyCodeFrom,$currencyCodeTo,$result;
+
+    public function store(Request $request): JsonResponse
+    {
+        $data = self::read();
+        if ($data->status() === 201) {
+            $content = $data->getOriginalContent();
+            $length = sizeof($content[0]);
+            for ($i = 0; $i < $length; $i++) {
+                Currency::updateOrCreate(
+                    ['name' => $content[0][$i]->currency],
+                    ['currency_code' => $content[0][$i]->code, 'exchange_rate' => $content[0][$i]->mid]
+                );
+            }
+            return response()->json([
+                'message' => 'Records created'
+            ], 201);
+        } else {
+            return response()->json([
+                'message' => 'no content'
+            ], 404);
+        }
+    }
 
     protected function read(): JsonResponse
     {
@@ -33,81 +53,27 @@ class CurrencyService
 
     }
 
-    public function store(Request $request): JsonResponse
-    {
-        $data = self::read();
-        if ($data->status() === 201) {
-            $content = $data->getOriginalContent();
-            $this->length = sizeof($content[0]);
-            for ($i = 0; $i < $this->length; $i++) {
-                Currency::updateOrCreate(
-                    ['name' => $content[0][$i]->currency],
-                    ['currency_code' => $content[0][$i]->code, 'exchange_rate' => $content[0][$i]->mid]
-                );
-            }
-            return response()->json([
-                'message' => 'Records created'
-            ], 201);
-        } else {
-            return response()->json([
-                'message' => 'no content'
-            ], 404);
-        }
-    }
-
-    private function getExchangeRate(string $currencyCode) : float
+    private function getExchangeRate(string $currencyCode): float
     {
         $currency = Currency::select('exchange_rate')
-            ->where('currency_code',$currencyCode)
-            ->get();
-
-        return $currency[0]->exchange_rate;
+            ->where('currency_code', $currencyCode)
+            ->first();;
+        return $currency->exchange_rate;
     }
 
-    private function validateForm(Request $request): JsonResponse
+    public function convertCurrency(CurrencyRequest $request)
     {
-        try {
-            $this->amount = $request->amount;
-            $this->currencyCodeFrom = $request->from;
-            $this->currencyCodeTo = $request->to;
 
-            $request->validate([
-                'amount' => 'required|numeric',
-                'from' => 'required|string|min:3',
-                'to' => 'required|string|min:3',
-            ]);
-            return response()->json([
-                'message' => "success"
-            ], 201);
+        $exchangeRateTo = self::getExchangeRate($request->to);
+        $exchangeRateFrom = self::getExchangeRate($request->from);
+        $totalValue = ($request->amount * $exchangeRateFrom) / $exchangeRateTo;
 
-        }catch (Exception $e)
-        {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
-        }
+        $result = $request->amount . " " . $request->from . " = " . round($totalValue, 2) . " " . $request->to;
+
+        Alert::success('Currency conversion amount', $result);
+        return $result;
 
     }
 
-    public function convertCurrency(Request $request)
-    {
-            if(self::validateForm($request)->getStatusCode() === 201)
-            {
-                if($this->currencyCodeFrom === "PLN")
-                {
-                    $this->exchangeRate = self::getExchangeRate($this->currencyCodeTo);
-                    $this->totalValue = $this->amount / $this->exchangeRate;
-                }
-                else
-                {
-                    $this->exchangeRate = self::getExchangeRate($this->currencyCodeFrom);
-                    $this->totalValue = $this->amount * $this->exchangeRate;
-                }
-                $this->result = $this->amount." ".$this->currencyCodeFrom." = ".round($this->totalValue,2)." ".$this->currencyCodeTo;
-
-                Alert::success('Currency conversion amount',$this->result);
-                return $this->result;
-            }
-    }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CurrencyRequest;
 use Illuminate\Http\Request;
 use App\Services\Currency\CurrencyService;
 
@@ -31,9 +32,10 @@ class CurrencyController extends Controller
         return view("/welcome");
     }
 
-    public function convertCurrency(Request $request)
+    public function convertCurrency(CurrencyRequest $request)
     {
         $this->currencyService->convertCurrency($request);
         return view("/welcome");
     }
+
 }

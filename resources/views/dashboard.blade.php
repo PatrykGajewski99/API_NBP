@@ -11,7 +11,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                        <form method="get" name="conversion" id="conversion" action="{{route('convert.gold')}}">
+                        <form method="get" name="conversion" id="conversion" action="{{route('convert.gold.to.currency')}}">
                             @csrf
                             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                                 <div class="grid grid-cols-3 md:grid-cols-2">
@@ -23,7 +23,7 @@
 
                                         <div class="ml-12">
                                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                                <input type="number" id="gold" name="gold" class="field" step="0.01" required>
+                                                <input type="number" id="amount" name="amount" class="field" step="0.01" required>
                                                 <a class="swap" id="swap" href="{{route('convertGoldToCurrency')}}"><></a>
                                             </div>
                                         </div>
@@ -37,7 +37,8 @@
 
                                         <div class="ml-12">
                                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                                <select id="to" name="to" class="field">
+                                                <select id="currency" name="currency" class="field">
+                                                    <option value="PLN">polski złoty</option>
                                                     <option value="UAH">hrywna (Ukraina)</option>
                                                     <option value="USD">dolar amerykański</option>
                                                     <option value="THB">bat (Tajlandia)</option>
