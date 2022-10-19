@@ -1,8 +1,7 @@
 @if (Route::has('login'))
     <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-        <a href="{{ route('welcome') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline" style="margin-right: 20px">Home</a>
+        <a href="{{ route('welcome') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline" style="margin-right: 10px">Currency Exchange</a>
         @auth
-            <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
         @else
             <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
@@ -10,6 +9,6 @@
                 <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
             @endif
         @endauth
-        <a href="{{ route('gold.exchange') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Gold Converter</a>
+        <a href="{{ route('gold.exchange') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Gold Exchange</a>
     </div>
 @endif
