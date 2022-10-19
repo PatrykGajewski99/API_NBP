@@ -103,7 +103,7 @@ class CurrencyService
                     $this->exchangeRate = self::getExchangeRate($this->currencyCodeFrom);
                     $this->totalValue = $this->amount * $this->exchangeRate;
                 }
-                $this->result = $request->amount." ".$request->from." = ".round($this->totalValue,2)." ".$request->to;
+                $this->result = $this->amount." ".$this->currencyCodeFrom." = ".round($this->totalValue,2)." ".$this->currencyCodeTo;
 
                 Alert::success('Currency conversion amount',$this->result);
                 return $this->result;

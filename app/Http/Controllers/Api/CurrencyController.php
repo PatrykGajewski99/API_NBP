@@ -31,7 +31,7 @@ class CurrencyController extends Controller
         return view("/welcome");
     }
 
-    public function convertPLN(Request $request)
+    public function convertCurrency(Request $request)
     {
         $this->currencyService->convertCurrency($request);
         return view("/welcome");

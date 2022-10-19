@@ -21,4 +21,11 @@ class GoldController extends Controller
 
         return view("/dashboard");
     }
+
+    public function convertGoldToCurrency(Request $request)
+    {
+        $this->goldService->convertGoldToCurrency($request);
+
+        return view("/dashboard");
+    }
 }

@@ -20,10 +20,12 @@ Route::match(['get','post'],'/',[CurrencyController::class,'store'])->name('welc
 
 require __DIR__.'/auth.php';
 
-Route::get('/result',[CurrencyController::class,'convertPLN'])->name('result');
+Route::get('/result',[CurrencyController::class,'convertCurrency'])->name('result');
 
 Route::get('/convertCurrency', function () {
     return view('convertCurrency');
 })->name('convertCurrency');
 
 Route::match(['get','post'],'/goldExchange',[GoldController::class,'store'])->middleware(['auth', 'verified'])->name('gold.exchange');
+
+Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])->name('convert.gold');
