@@ -16,13 +16,6 @@ class GoldController extends Controller
         $this->goldService = $goldService;
     }
 
-    public function store()
-    {
-        $this->goldService->store();
-
-        return view("/dashboard");
-    }
-
     public function convertGoldToCurrency(GoldRequest $request)
     {
         $this->goldService->convertGoldToCurrency($request);

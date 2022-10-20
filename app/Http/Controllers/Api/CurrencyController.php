@@ -25,13 +25,6 @@ class CurrencyController extends Controller
         $this->currencyService = $currencyService;
     }
 
-    public function store(Request $request)
-    {
-        $this->currencyService->store($request);
-
-        return view("/welcome");
-    }
-
     public function convertCurrency(CurrencyRequest $request)
     {
         $this->currencyService->convertCurrency($request);
