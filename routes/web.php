@@ -35,7 +35,20 @@ Route::get('/goldExchange', function () {
 
 Route::get('/convertGoldToCurrency', function () {
     return view('convertGold');
-})->name('convertGoldToCurrency');
+})->name('convertGoldToCurrency')->middleware(['auth', 'verified']);
 
-Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])->name('convert.gold.to.currency');
-Route::get('/convertCurrencyToGold',[GoldController::class,'convertCurrencyToGold'])->name('convert.currency.to.gold');
+Route::get('/convertGold',[GoldController::class,'convertGoldToCurrency'])
+    ->name('convert.gold.to.currency')
+    ->middleware(['auth', 'verified']);
+
+Route::get('/convertCurrencyToGold',[GoldController::class,'convertCurrencyToGold'])
+    ->name('convert.currency.to.gold')
+    ->middleware(['auth', 'verified']);
+
+Route::get('/currencyRates', function () {
+    return view('currencyRate');
+})->middleware(['auth', 'verified'])->name('currency.rate');
+
+Route::get('/currencyRate',[CurrencyController::class,'checkCurrencyRate'])
+    ->middleware(['auth', 'verified'])
+    ->name('check.currency.rate');

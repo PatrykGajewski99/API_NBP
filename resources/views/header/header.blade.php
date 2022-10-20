@@ -10,5 +10,6 @@
             @endif
         @endauth
         <a href="{{ route('gold.exchange') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Gold Exchange</a>
+        <a href="{{ route('currency.rate') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Check Currency Rate</a>
     </div>
 @endif

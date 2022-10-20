@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         {{ __('Currency Exchange') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('currency.rate')" :active="request()->routeIs('currency.rate')">
+                        {{ __('Check Currency Rate') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +72,9 @@
             </x-nav-link>
             <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                 {{ __('Currency Exchange') }}
+            </x-nav-link>
+            <x-nav-link :href="route('currency.rate')" :active="request()->routeIs('currency.rate')">
+                {{ __('Check Currency Rate') }}
             </x-nav-link>
         </div>
 

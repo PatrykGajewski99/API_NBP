@@ -31,4 +31,10 @@ class CurrencyController extends Controller
         return view("/welcome");
     }
 
+    public function checkCurrencyRate(Request $request)
+    {
+        $this->currencyService->checkCurrencyRate($request);
+        return view("/currencyRate");
+    }
+
 }
