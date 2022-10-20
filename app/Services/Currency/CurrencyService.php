@@ -41,6 +41,7 @@ class CurrencyService
         try {
             $response = Http::get("https://api.nbp.pl/api/exchangerates/tables/A");
             $collection = json_decode($response);
+            dd($collection->fi);
             return response()->json([
                 $collection[0]->rates
             ], 201);

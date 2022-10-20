@@ -7,6 +7,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        \App\Console\Commands\CurrencyCron::class,
+    ];
     /**
      * Define the application's command schedule.
      *
@@ -15,7 +18,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('currency:cron')
+            ->hourly();
+        $schedule->command('gold:cron')
+            ->hourly();
     }
 
     /**

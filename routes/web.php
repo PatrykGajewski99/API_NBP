@@ -16,7 +16,10 @@ use App\Http\Controllers\Api\GoldController;
 */
 
 
-Route::match(['get','post'],'/',[CurrencyController::class,'store'])->name('welcome');
+
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
 require __DIR__.'/auth.php';
 
@@ -26,7 +29,9 @@ Route::get('/convertCurrency', function () {
     return view('convertCurrency');
 })->name('convertCurrency');
 
-Route::match(['get','post'],'/goldExchange',[GoldController::class,'store'])->middleware(['auth', 'verified'])->name('gold.exchange');
+Route::get('/goldExchange', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('gold.exchange');
 
 Route::get('/convertGoldToCurrency', function () {
     return view('convertGold');
